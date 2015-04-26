@@ -22,11 +22,11 @@ def rankings():
     return render_template('rankings.html')
 
 
-@app.route('/movie', methods=['GET'])
+@app.route('/movie/', methods=['GET'])
 @app.route('/movie/<id>', methods=['GET'])
-def get_movies(id=None):
+def get_movie(id=None):
     if id is not None:
-        movies = Movie.query.filter(Movie.id == id).all()
+        movies = Movie.query.filter(Movie.id == id).scalar().as_dict()
     else:
         movies = [mov.as_dict() for mov in Movie.query.order_by(Movie.votes)]
 
@@ -37,12 +37,40 @@ def get_movies(id=None):
 def add_movie():
     title = request.form.get('title')
     if title:
-        movie = Movie(title=title)
+        movie = Movie(title=title, votes=0)
         Session().add(movie)
         Session().commit()
-        return flask.jsonify({'title': title}), 201
+
+        return flask.jsonify({'Added movie': movie.as_dict()}), 201
     else:
         return "Invalid request", 400
+
+
+@app.route('/movie/<int:id>', methods=['DELETE'])
+def delete_movie(id):
+    mov = Movie.query.filter(Movie.id == id).scalar()
+    if mov is not None:
+        Session().delete(mov)
+        Session().commit()
+        return flask.jsonify({'deleted': mov.as_dict()}), 200
+    else:
+        return "Movie not found", 404
+
+
+@app.route('/movie/<int:movie_id>', methods=['PUT'])
+def update_movie(movie_id):
+    mov = Movie.query.filter(Movie.id == movie_id).scalar()
+
+    if mov is not None:
+        for key, value in request.form.iteritems():
+            if hasattr(mov, key):
+                setattr(mov, key, value)
+        Session().add(mov)
+        Session().commit()
+        return flask.jsonify({'movie': mov.as_dict()}), 200
+
+    else:
+        return "Id not found: " + str(movie_id), 404
 
 
 if __name__ == '__main__':
