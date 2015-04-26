@@ -17,13 +17,18 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/rankings/')
+def rankings():
+    return render_template('rankings.html')
+
+
 @app.route('/movie', methods=['GET'])
 @app.route('/movie/<id>', methods=['GET'])
 def get_movies(id=None):
     if id is not None:
         movies = Movie.query.filter(Movie.id == id).all()
     else:
-        movies = [mov.as_dict() for mov in Movie.query]
+        movies = [mov.as_dict() for mov in Movie.query.order_by(Movie.votes)]
 
     return flask.jsonify({'movies': movies})
 

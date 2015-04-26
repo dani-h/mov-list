@@ -31,3 +31,4 @@ class Movie(Base):
     __tablename__ = 'movie'
     id = Column(Integer, primary_key=True)
     title = Column(String(80))
+    votes = Column(Integer)
