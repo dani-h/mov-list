@@ -1,0 +1,26 @@
+nav {
+  width: 50%;
+  margin: 0 auto;
+}
+
+#content {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.movie-widget:after {
+  clear:both; 
+}
+
+.widget-button-container {
+  float:right;
+}
+
+.title {
+  width: 25%;
+}
+
+.votes {
+  width: 10%;
+  font-weight: bold;
+}
