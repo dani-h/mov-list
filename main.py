@@ -22,8 +22,8 @@ def rankings():
     return render_template('rankings.html')
 
 
-@app.route('/movie/', methods=['GET'])
-@app.route('/movie/<id>', methods=['GET'])
+@app.route('/movies/', methods=['GET'])
+@app.route('/movies/<id>', methods=['GET'])
 def get_movie(id=None):
     if id is not None:
         movies = Movie.query.filter(Movie.id == id).scalar().as_dict()
@@ -33,7 +33,7 @@ def get_movie(id=None):
     return flask.jsonify({'movies': movies})
 
 
-@app.route('/movie/', methods=['POST'])
+@app.route('/movies/', methods=['POST'])
 def add_movie():
     title = request.form.get('title')
     if title:
@@ -46,7 +46,7 @@ def add_movie():
         return "Invalid request", 400
 
 
-@app.route('/movie/<int:id>', methods=['DELETE'])
+@app.route('/movies/<int:id>', methods=['DELETE'])
 def delete_movie(id):
     mov = Movie.query.filter(Movie.id == id).scalar()
     if mov is not None:
@@ -57,7 +57,7 @@ def delete_movie(id):
         return "Movie not found", 404
 
 
-@app.route('/movie/<int:movie_id>', methods=['PUT'])
+@app.route('/movies/<int:movie_id>', methods=['PUT'])
 def update_movie(movie_id):
     mov = Movie.query.filter(Movie.id == movie_id).scalar()
 
