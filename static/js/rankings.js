@@ -3,14 +3,27 @@
 $(document).ready(function() {
 
   var MovieWidget = React.createClass({
-    render: function() {
+    handle_upvote: function() {
+      var data = this.props.data
+      data.votes += 1
+      $.ajax('/movies/' + data.id, {method: 'PUT', data: {votes: data.votes}})
+      this.setState({votes: data.votes})
+    },
 
+    handle_downvote: function() {
+      var data = this.props.data
+      data.votes -= 1
+      $.ajax('/movies/' + data.id, {method: 'PUT', data: {votes: data.votes}})
+      this.setState({votes: data.votes})
+    },
+
+    render: function() {
       /* jshint ignore:start */
       return (
           <div class="movie-widget">
             <div className="vote-icons">
-              <span className="glyphicon glyphicon-menu-up"></span>
-              <span className="glyphicon glyphicon-menu-down"></span>
+              <span className="glyphicon glyphicon-menu-up" onClick={this.handle_upvote} ></span>
+              <span className="glyphicon glyphicon-menu-down" onClick={this.handle_downvote} ></span>
             </div>
             <span className="votes"> {this.props.data.votes}</span>
             <span className="title"> {this.props.data.title}</span>
@@ -22,7 +35,9 @@ $(document).ready(function() {
   var MovieList = React.createClass({
     render: function() {
       /* jshint ignore:start */
-      var movies = this.props.data.map(function(movie) {
+      var movies = this.props.data.sort(function(a, b) {
+        return a.votes < b.votes 
+      }).map(function(movie) {
         return (<MovieWidget data={movie} />)
       })
 
@@ -38,7 +53,6 @@ $(document).ready(function() {
 
 
   function main() {
-
     $.ajax('/movies/', {
       method: 'GET'
     }).then(function(data) {
