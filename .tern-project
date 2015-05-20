@@ -4,12 +4,8 @@
     "jquery"
   ],
   "loadEagerly": [
-    "lib/react/"
+    "static/lib/react/react.js"
   ],
   "plugins": {
-    "requirejs": {
-      "baseURL": "./",
-      "paths": {}
-    }
   }
 }
