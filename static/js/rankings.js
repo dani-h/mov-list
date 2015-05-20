@@ -1,118 +1,48 @@
-/* global $, Mustache */
+/** @jsx React.DOM */
+/* global $, React */
 $(document).ready(function() {
 
-  /**
-   * Data
-   */
-  function Movie(json) {
-    return {
-      id: json.id,
-      title: json.title,
-      votes: json.votes,
-      upvote: function() {
-        this.votes++
-      },
-      downvote: function() {
-        this.votes--
-      }
+  var MovieWidget = React.createClass({
+    render: function() {
+
+      /* jshint ignore:start */
+      return (
+          <div class="movie-widget">
+            <div className="vote-icons">
+              <span className="glyphicon glyphicon-menu-up"></span>
+              <span className="glyphicon glyphicon-menu-down"></span>
+            </div>
+            <span className="votes"> {this.props.data.votes}</span>
+            <span className="title"> {this.props.data.title}</span>
+          </div>)
+        /* jshint ignore:end */
     }
-  }
+  })
 
-
-  /**
-   * Views
-   */
-  function MovieList(movies) {
-    var template = `<ul class="list-group"></ul>`
-    var self = {}
-    self.$e = $(template)
-
-    var movieWidgets = movies.map(function(mov) {
-      var movie = Movie(mov)
-      return MovieWidget(movie)
-    })
-
-    self.render = function() {
-      var sorted = movieWidgets.sort(function(a, b) {
-        return a.movie.votes < b.movie.votes
+  var MovieList = React.createClass({
+    render: function() {
+      /* jshint ignore:start */
+      var movies = this.props.data.map(function(movie) {
+        return (<MovieWidget data={movie} />)
       })
-      sorted.forEach(function(widget) {
-        widget.render()
-        self.$e.append(widget.$e)
-      })
-      $("#list-container").append(self.$e)
+
+      return (
+          <div className="movie-list">
+          {movies}
+          </div>
+        )
+        /* jshint ignore:end */
     }
-
-    return self
-  }
+  })
 
 
-  function MovieWidget(movie) {
-    var template = `<li class="list-group-item movie-widget">
-        <span class="votes">{{votes}}</span>
-        <span class="title">{{title}}</span>
-        <div class="widget-button-container">
-          <button type="button" class="upvote btn btn-default btn-sm">
-            <span class="glyphicon glyphicon-menu-up"></span>Upvote
-          </button>
-          <button type="button" class="downvote btn btn-default btn-sm">
-            <span class="glyphicon glyphicon-menu-down"></span>Downvote
-          </button>
-        </div>
-      </li>`
 
-    var self = {}
-    self.movie = movie
-    self.$e = $('<div>')
-    self.$e.on('click', '.upvote', upvote)
-    self.$e.on('click', '.downvote', downvote)
-
-    self.render = function() {
-      this.$e.html(Mustache.render(template, this.movie))
-    }
-
-    function upvote(ev) {
-      var upvote_def = $.ajax('/movie/' + movie.id, {
-        method: 'PUT',
-        data: {
-          votes: movie.votes + 1
-        }
-      })
-
-      upvote_def.done(function(foo) {
-        self.movie.votes += 1
-        self.render()
-      })
-    }
-
-    function downvote(ev) {
-      var upvote_def = $.ajax('/movie/' + movie.id, {
-        method: 'PUT',
-        data: {
-          votes: movie.votes - 1
-        }
-      })
-
-      upvote_def.done(function(updated_mov) {
-        self.movie.votes -= 1
-        self.render()
-      })
-    }
-
-    return self
-  }
-
-
-  /**
-   * Main func
-   */
   function main() {
-    var movie_def = $.ajax('/movie/', {
+
+    $.ajax('/movies/', {
       method: 'GET'
-    })
-    movie_def.then(function(data) {
-      var list = MovieList(data.movies)
-      list.render()
+    }).then(function(data) {
+      React.render(<MovieList data={data.movies}/>, $("#content")[0])
     })
   }
 

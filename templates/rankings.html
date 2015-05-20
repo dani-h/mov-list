@@ -11,8 +11,9 @@
     <link rel="stylesheet" href="/css/rankings.css">
 
     <script src="/lib/jquery/jquery-2.1.3.min.js"></script>
-    <script src="/lib/mustache/mustache.min.js"></script>
-    <script src="/js/rankings.js"></script>
+    <script src="/lib/react/react.js"></script>
+    <script src="/lib/react/JSXTransformer.js"></script>
+    <script type="text/jsx" src="/js/rankings.js"></script>
 </head>
 
 <body>
@@ -22,15 +23,12 @@
                 <a class="navbar-brand" href="#">Mov-List</a>
             </div>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/">Search</a></li>
                 <li class="active"><a href="/rankings">Rankings</a></li>
             </ul>
         </div>
     </nav>
 
     <div id="content">
-        <div id="list-container">
-        </div>
     </div>
 </body>
 
