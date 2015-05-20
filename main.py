@@ -14,7 +14,7 @@ def shutdown_session(exception=None):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('rankings.html')
 
 
 @app.route('/rankings/')
