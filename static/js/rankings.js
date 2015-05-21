@@ -6,15 +6,31 @@ $(document).ready(function() {
     handle_upvote: function() {
       var data = this.props.data
       data.votes += 1
-      $.ajax('/movies/' + data.id, {method: 'PUT', data: {votes: data.votes}})
-      this.setState({votes: data.votes})
+      $.ajax('/movies/' + data.id, {
+        method: 'PUT',
+        data: {
+          votes: data.votes
+        }
+      }).then(function() {
+        this.setState({
+          votes: data.votes
+        })
+      })
     },
 
     handle_downvote: function() {
       var data = this.props.data
       data.votes -= 1
-      $.ajax('/movies/' + data.id, {method: 'PUT', data: {votes: data.votes}})
-      this.setState({votes: data.votes})
+      $.ajax('/movies/' + data.id, {
+        method: 'PUT',
+        data: {
+          votes: data.votes
+        }
+      }).then(function() {
+        this.setState({
+          votes: data.votes
+        })
+      })
     },
 
     render: function() {
@@ -36,7 +52,7 @@ $(document).ready(function() {
     render: function() {
       /* jshint ignore:start */
       var movies = this.props.data.sort(function(a, b) {
-        return a.votes < b.votes 
+        return a.votes < b.votes
       }).map(function(movie) {
         return (<MovieWidget data={movie} />)
       })
