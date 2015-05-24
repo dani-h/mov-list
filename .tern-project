@@ -4,7 +4,9 @@
     "jquery"
   ],
   "loadEagerly": [
-    "static/lib/react/react.js"
+    "static/lib/react/react.js",
+    "static/lib/react/Flux.js",
+    "static/lib/microevent/microevent.js"
   ],
   "plugins": {
   }
