@@ -4,39 +4,36 @@ $(document).ready(function() {
 
   var MovieWidget = React.createClass({
     handle_upvote: function() {
-      var data = this.props.data
-      data.votes += 1
-      $.ajax('/movies/' + data.id, {
+      var id = this.props.data.id
+      var votes = this.props.data.votes
+      $.ajax('/movies/' + this.props.data.id, {
         method: 'PUT',
         data: {
-          votes: data.votes
+          votes: votes + 1
         }
       }).then(function() {
-        this.setState({
-          votes: data.votes
-        })
+        Actions.upvote_movie(id)
       })
     },
 
     handle_downvote: function() {
-      var data = this.props.data
-      data.votes -= 1
-      $.ajax('/movies/' + data.id, {
+      var id = this.props.data.id
+      var votes = this.props.data.votes
+      $.ajax('/movies/' + this.props.data.id, {
         method: 'PUT',
         data: {
-          votes: data.votes
+          votes: votes - 1
         }
       }).then(function() {
-        this.setState({
-          votes: data.votes
-        })
+
+        Actions.downvote_movie(id)
       })
     },
 
     render: function() {
-      /* jshint ignore:start */
+      /* eslint-disable */
       return (
-          <div class="movie-widget">
+          <div className="movie-widget">
             <div className="vote-icons">
               <span className="glyphicon glyphicon-menu-up" onClick={this.handle_upvote} ></span>
               <span className="glyphicon glyphicon-menu-down" onClick={this.handle_downvote} ></span>
@@ -44,26 +41,76 @@ $(document).ready(function() {
             <span className="votes"> {this.props.data.votes}</span>
             <span className="title"> {this.props.data.title}</span>
           </div>)
-        /* jshint ignore:end */
+        /* eslint-enable */
     }
   })
 
   var MovieList = React.createClass({
+    componentDidMount: function() {
+      MovieStore.bind('change', this.forceUpdate.bind(this))
+    },
+
     render: function() {
-      /* jshint ignore:start */
-      var movies = this.props.data.sort(function(a, b) {
-        return a.votes < b.votes
-      }).map(function(movie) {
-        return (<MovieWidget data={movie} />)
-      })
+      /* eslint-disable */
+      var movies = MovieStore.get_all()
+        .sort(function(a, b) {
+          return a.votes < b.votes
+        })
+        .map(function(movie) {
+          return (<MovieWidget data={movie} />)
+        })
 
       return (
           <div className="movie-list">
           {movies}
           </div>
         )
-        /* jshint ignore:end */
+        /* eslint-enable */
     }
+  })
+
+
+  var MovieStore = {
+    movies: {},
+    get_all: function() {
+      return Object.keys(MovieStore.movies).map(function(id) {
+        return MovieStore.movies[id]
+      })
+    }
+  }
+  MicroEvent.mixin(MovieStore)
+
+
+  var Actions = {
+    upvote_movie: function(id) {
+      Dispatcher.dispatch({
+        event: 'upvote',
+        id: id
+      })
+    },
+    downvote_movie: function(id) {
+      Dispatcher.dispatch({
+        event: 'downvote',
+        id: id
+      })
+    }
+  }
+
+
+  var Dispatcher = new Flux.Dispatcher()
+  Dispatcher.register(function(data) {
+    switch (data.event) {
+      case 'upvote':
+        MovieStore.movies[data.id].votes += 1
+        MovieStore.trigger('change')
+        break
+      case 'downvote':
+        MovieStore.movies[data.id].votes -= 1
+        MovieStore.trigger('change')
+        break
+    }
+
+    return true
   })
 
 
@@ -72,7 +119,10 @@ $(document).ready(function() {
     $.ajax('/movies/', {
       method: 'GET'
     }).then(function(data) {
-      React.render(<MovieList data={data.movies}/>, $("#content")[0])
+      data.movies.forEach(function(movie) {
+        MovieStore.movies[movie.id] = movie
+      })
+      React.render(<MovieList/>, $("#content")[0])
     })
   }
 
