@@ -1,5 +1,5 @@
 /** @jsx React.DOM */
-/* global $, React */
+/* global $, React, Flux, MicroEvent */
 $(document).ready(function() {
 
   var MovieWidget = React.createClass({
@@ -31,7 +31,7 @@ $(document).ready(function() {
     },
 
     render: function() {
-      /* eslint-disable */
+      /*jshint ignore:start*/
       return (
           <div className="movie-widget">
             <div className="vote-icons">
@@ -41,7 +41,7 @@ $(document).ready(function() {
             <span className="votes"> {this.props.data.votes}</span>
             <span className="title"> {this.props.data.title}</span>
           </div>)
-        /* eslint-enable */
+      /*jshint ignore:end*/
     }
   })
 
@@ -51,7 +51,7 @@ $(document).ready(function() {
     },
 
     render: function() {
-      /* eslint-disable */
+      /*jshint ignore:start*/
       var movies = MovieStore.get_all()
         .sort(function(a, b) {
           return a.votes < b.votes
@@ -65,7 +65,7 @@ $(document).ready(function() {
           {movies}
           </div>
         )
-        /* eslint-enable */
+      /*jshint ignore:end*/
     }
   })
 
@@ -122,7 +122,7 @@ $(document).ready(function() {
       data.movies.forEach(function(movie) {
         MovieStore.movies[movie.id] = movie
       })
-      React.render(<MovieList/>, $("#content")[0])
+      React.render(MovieList, $("#content")[0])
     })
   }
 
