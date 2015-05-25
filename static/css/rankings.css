@@ -8,21 +8,28 @@ nav {
   margin: 0 auto;
 }
 
+#search-box {
+  width: 100%;
+}
+
 #movie-list {
   margin-top: 50px;
 }
 
-.movie-widget {
+#search-content {
+  margin-top: 50px;
+}
 
+.search-results {
+  width: 100%;
+  overflow:auto;
+  margin-top: 20px;
+  padding: 0px;
 }
 
 .votes, .title{
   font-size:200%;  
   color:gray;
-}
-
-.title:hover {
-  color:black;
 }
 
 .votes {
