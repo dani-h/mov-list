@@ -53,14 +53,15 @@ $(document).ready(function() {
     render: function() {
       /*jshint ignore:start*/
       return (
-          <div className="movie-widget">
+
+          <li className="list-group-item movie-widget">
           <div className="vote-icons">
           <span className="glyphicon glyphicon-menu-up" onClick={this.handle_upvote} ></span>
           <span className="glyphicon glyphicon-menu-down" onClick={this.handle_downvote} ></span>
           </div>
           <span className="votes"> {this.props.data.votes}</span>
           <span className="title"> {this.props.data.title}</span>
-          </div>
+          </li>
         )
         /*jshint ignore:end*/
     }
@@ -79,9 +80,9 @@ $(document).ready(function() {
         })
 
       return (
-          <div id="movie-list">
+          <ul id="list-group movie-list">
           {movies}
-          </div>
+          </ul>
         )
         /*jshint ignore:end*/
     }
@@ -127,7 +128,7 @@ $(document).ready(function() {
       /*jshint ignore:start*/
       var results = SearchResultsStore.get_all()
         .map(function(entry) {
-          return <li className="list-group-item">{entry.Title}</li>
+          return <SearchResultItem data={entry}/>
         })
         .slice(0, 5)
 
@@ -135,15 +136,39 @@ $(document).ready(function() {
       return (
           <ul className="list-group search-results">
         {results}
-          </ul>
+        </ul>
         )
         /*jshint ignore:end*/
+    }
+  })
+
+  var SearchResultItem = React.createClass({
+    add_movie: function() {
+      $.ajax('/movies/', {
+        method: 'POST',
+        data: {
+          title: this.props.data.title
+        }
+      })
+    },
+
+    render: function() {
+      var props = {
+        className: "list-group-item",
+        onClick: this.add_movie
+      }
+      return React.DOM.li(props, this.props.data.title)
     }
   })
 
 
   var MovieStore = {
     movies: {},
+
+    add_movie: function(movie) {
+      MovieStore[movie.id] = movie
+    },
+
     get_all: function() {
       return Object.keys(MovieStore.movies).map(function(k) {
         return MovieStore.movies[k]
@@ -154,18 +179,42 @@ $(document).ready(function() {
 
   var SearchResultsStore = {
     results: {},
+
     get_all: function() {
       return Object.keys(SearchResultsStore.results).map(function(k) {
         return SearchResultsStore.results[k]
       })
-    }
+    },
+
+    update_movies: function(movies) {
+      if (movies.length === 0) {
+        SearchResultsStore.results = {}
+      }
+      else {
+        movies.forEach(function(movie) {
+          SearchResultsStore.results[movie.Id] = SearchResultsStore.normalize_movie(movie)
+        })
+      }
+    },
+
+    normalize_movie: function(api_movie) {
+      var movie = {}
+      Object.keys(api_movie).forEach(function(key) {
+        movie[key.toLowerCase()] = api_movie[key]
+      })
+      return movie
+    },
   }
   MicroEvent.mixin(SearchResultsStore)
 
 
-
-
   var Actions = {
+    add_movie: function(movie) {
+      Dispatcher.dispatch({
+        event: 'add-movie',
+        movie: movie
+      })
+    },
     upvote_movie: function(id) {
       Dispatcher.dispatch({
         event: 'upvote',
@@ -199,16 +248,10 @@ $(document).ready(function() {
         MovieStore.trigger('change')
         break
       case 'update-search':
-        if (data.results.length) {
-          data.results.forEach(function(entry) {
-            SearchResultsStore.results[entry.imdbID] = entry
-          })
-        }
-        else {
-          SearchResultsStore.results = {}
-        }
-
+        SearchResultsStore.update_movies(data.results)
         SearchResultsStore.trigger('change')
+        break
+      case 'add-movie':
         break
     }
 
