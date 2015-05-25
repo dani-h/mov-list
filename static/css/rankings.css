@@ -14,6 +14,7 @@ nav {
 
 #movie-list {
   margin-top: 50px;
+  padding: 0;
 }
 
 #search-content {
@@ -22,26 +23,44 @@ nav {
 
 .search-results {
   width: 100%;
-  overflow:auto;
+  overflow: auto;
   margin-top: 20px;
   padding: 0px;
 }
 
-.votes, .title{
-  font-size:200%;  
-  color:gray;
+.votes,
+.title,
+.index {
+  font-size: 150%;
+  color: gray;
+}
+
+.title {
+  margin: 0 5px;
 }
 
 .votes {
   font-weight: bold;
-  margin: 0 10px;
+  position: absolute;
+  right: 5px;
 }
 
 .vote-icons {
   display: inline-block;
 }
 
-.glyphicon-menu-up, .glyphicon-menu-down{
-  display:block;
+.empty-movielist {
+  font-size: 200%;
+  font-weight: bold;
+  text-align: center;
 }
 
+.search-item-btn {
+  position: absolute;
+  right: 0;
+}
+
+.glyphicon-menu-up,
+.glyphicon-menu-down {
+  display: block;
+}

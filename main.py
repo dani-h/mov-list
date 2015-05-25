@@ -41,7 +41,7 @@ def add_movie():
         Session().add(movie)
         Session().commit()
 
-        return flask.jsonify({'Added movie': movie.as_dict()}), 201
+        return flask.jsonify(movie.as_dict()), 201
     else:
         return "Invalid request", 400
 
@@ -52,7 +52,7 @@ def delete_movie(id):
     if mov is not None:
         Session().delete(mov)
         Session().commit()
-        return flask.jsonify({'deleted': mov.as_dict()}), 200
+        return flask.jsonify(mov.as_dict()), 200
     else:
         return "Movie not found", 404
 
@@ -67,7 +67,7 @@ def update_movie(movie_id):
                 setattr(mov, key, value)
         Session().add(mov)
         Session().commit()
-        return flask.jsonify({'movie': mov.as_dict()}), 200
+        return flask.jsonify(mov.as_dict()), 200
 
     else:
         return "Id not found: " + str(movie_id), 404
