@@ -12,6 +12,10 @@ def shutdown_session(exception=None):
     Session.remove()
 
 
+# ----------------------------------------------------
+# Templates
+# ----------------------------------------------------
+
 @app.route('/')
 def index():
     return render_template('rankings.html')
@@ -21,6 +25,9 @@ def index():
 def rankings():
     return render_template('rankings.html')
 
+# ----------------------------------------------------
+# Movie api
+# ----------------------------------------------------
 
 @app.route('/movies/', methods=['GET'])
 @app.route('/movies/<id>', methods=['GET'])
@@ -36,8 +43,9 @@ def get_movie(id=None):
 @app.route('/movies/', methods=['POST'])
 def add_movie():
     title = request.form.get('title')
+    imdb_id = request.form.get('imdb_id')
     if title:
-        movie = Movie(title=title, votes=0)
+        movie = Movie(title=title, imdb_id=imdb_id, votes=0)
         Session().add(movie)
         Session().commit()
 
