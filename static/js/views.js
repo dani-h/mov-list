@@ -1,7 +1,6 @@
 /* global React, $ */
 var app = window.app
   // Note: For some reason JsHint dies if jsx is put in an IIFE
-  //(function() {
 
 var RootComponent = React.createClass({
   componentDidMount: function() {
@@ -82,11 +81,11 @@ var MovieList = React.createClass({
       })
 
     if (movies.length > 0) {
-      return movies
+      return <div>{movies}</div>
     }
 
     else {
-      return (<div className="empty-movielist">No movies. Add new ones</div>)
+      return <div className="empty-movielist">No movies. Add new ones</div>
     }
     /*jshint ignore:end*/
   }
@@ -134,7 +133,6 @@ var SearchResultsBox = React.createClass({
     /*jshint ignore:start*/
     var results = app.SearchStore.get_all()
       .map(function(entry) {
-        console.log("entry", entry)
         return <SearchResultItem data={entry}/>
       })
       .slice(0, 5)
@@ -154,9 +152,11 @@ var SearchResultItem = React.createClass({
     $.ajax('/movies/', {
       method: 'POST',
       data: {
-        title: this.props.data.title
+        title: this.props.data.title,
+        imdb_id: this.props.data.imdb_id,
       }
     }).then(function(new_movie) {
+      console.log("Server add new movie", new_movie)
       app.Actions.add_movie(new_movie)
     })
   },

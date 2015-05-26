@@ -27,6 +27,7 @@ Base.query = Session.query_property()
 class Movie(Base):
     __tablename__ = 'movie'
     id = Column(Integer, primary_key=True)
+    imdb_id = Column(String(40))
     title = Column(String(80))
     votes = Column(Integer, default=0)
     url = Column(String(80), default="")

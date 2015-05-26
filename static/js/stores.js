@@ -11,6 +11,17 @@ var app = app || {};
       title: api_data.title,
       votes: api_data.votes,
       url: api_data.url,
+      imdb_id: api_data.imdbid
+    }
+  }
+
+  function from_imdb_to_movie(imdb_data) {
+    var movie = {}
+    Object.keys(imdb_data).forEach(function(imdb_entry) {
+      movie[imdb_entry.toLowerCase()] = imdb_entry
+    })
+    return {
+
     }
   }
 
@@ -44,6 +55,7 @@ var app = app || {};
       var movies = MovieStore.movies
       switch (data.event) {
         case MovieStore_EVENTS.ADD_MOVIE:
+          console.log("Adding", data.movie)
           MovieStore.add_movie(data.movie)
           MovieStore.trigger('change')
           break;
@@ -86,12 +98,7 @@ var app = app || {};
     normalize_movie: function(omdb_movie) {
       var movie = {}
       Object.keys(omdb_movie).forEach(function(key) {
-        if (key === "imdbID") {
-          movie["id"] = omdb_movie[key]
-        }
-        else {
-          movie[key.toLowerCase()] = omdb_movie[key]
-        }
+        movie[key.toLowerCase()] = omdb_movie[key]
       })
       return movie
     },
@@ -107,7 +114,7 @@ var app = app || {};
           else {
             omdb_movies.forEach(function(omdb_movie) {
               var movie = SearchStore.normalize_movie(omdb_movie)
-              SearchStore.results[movie.id] = movie
+              SearchStore.results[movie.imdbid] = movie
             })
           }
           SearchStore.trigger('change')
