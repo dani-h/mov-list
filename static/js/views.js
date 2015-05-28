@@ -174,7 +174,7 @@ var SearchResultItem = React.createClass({
     return (
         <li className='list-group-item search-item'>
           <span className="search-item-title"> {this.props.data.title}</span>
-          <button type="button" className="btn btn-default btn-sm  search-item-btn" onClick={this.add_movie}>Add movie</button>
+          <button type="button" className="btn btn-primary btn-sm  search-item-btn" onClick={this.add_movie}>Add movie</button>
         </li>
       )
       /*jshint ignore:end*/
