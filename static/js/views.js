@@ -61,7 +61,7 @@ var MovieWidget = React.createClass({
           </div>
           <span className="index"> {this.props.idx + 1}</span>
           <img className="movie-img" src={this.props.data.img_src}/>
-          <span className="title"> {this.props.data.title}</span>
+          <span className="title"> <a href={this.props.data.url}>{this.props.data.title}</a></span>
           <span className="votes"> {this.props.data.votes}</span>
           </li>
       )
@@ -94,9 +94,15 @@ var MovieList = React.createClass({
 
 
 var SearchBox = React.createClass({
+  getInitialState: function() {
+    return {disabled: false}
+  },
+
   search: function(event) {
+    var self = this
     // If enter key pressed
     if (event.keyCode === 13) {
+      self.setState({'disabled': true})
       var search_string = event.target.value
       var url = 'http://www.omdbapi.com/'
       console.log("Requesting from omdb...key:", search_string)
@@ -107,12 +113,14 @@ var SearchBox = React.createClass({
           s: search_string
         }
       }).then(function(data) {
-        console.log("Request successful...")
         var results = []
         if (data.Search) {
           results = data.Search
         }
         app.Actions.update_search(results)
+      }).done(function() {
+        console.log("Request done")
+        self.setState({'disabled': false})
       })
     }
   },
@@ -121,7 +129,8 @@ var SearchBox = React.createClass({
     return (
       /*jshint ignore:start*/
       <div id="search-box" className="input-group">
-          <input type="text" className="form-control" placeholder="Search new movie" onKeyUp={this.search}/>
+          <input type="text" className="form-control" placeholder="Search new movie"
+          onKeyUp={this.search} disabled={this.state.disabled}/>
         </div>
       /*jshint ignore:end*/
     )
