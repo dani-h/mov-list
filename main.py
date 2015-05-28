@@ -4,6 +4,8 @@ import os
 import flask
 from flask import Flask, request, render_template
 from models import Session, Movie
+from BeautifulSoup import BeautifulSoup as Soup
+import urllib
 
 app = Flask(__name__, static_url_path='')
 
@@ -44,8 +46,9 @@ def get_movie(id=None):
 def add_movie():
     title = request.form.get('title')
     imdb_id = request.form.get('imdb_id')
-    if title:
-        movie = Movie(title=title, imdb_id=imdb_id, votes=0)
+    if title is not None and imdb_id is not None:
+        img_src = get_img_url(imdb_id)
+        movie = Movie(title=title, imdb_id=imdb_id, img_src=img_src, votes=0)
         Session().add(movie)
         Session().commit()
 
@@ -79,6 +82,16 @@ def update_movie(movie_id):
 
     else:
         return "Id not found: " + str(movie_id), 404
+
+
+# ----------------------------------------------------
+# Helpers
+# ----------------------------------------------------
+def get_img_url(imdb_id):
+    url = "http://www.imdb.com/title/" + imdb_id
+    soup = Soup(urllib.urlopen(url))
+    img = soup.find(id='img_primary').find('img')
+    return img['src']
 
 
 if __name__ == '__main__':

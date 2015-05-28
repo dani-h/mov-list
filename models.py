@@ -31,5 +31,6 @@ class Movie(Base):
     title = Column(String(80))
     votes = Column(Integer, default=0)
     url = Column(String(80), default="")
+    img_src = Column(String(80), default="")
 
 Base.metadata.create_all(bind=engine)
