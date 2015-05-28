@@ -78,7 +78,7 @@ var MovieList = React.createClass({
         return a.votes < b.votes
       })
       .map(function(movie, idx) {
-        return (<MovieWidget data={movie} idx={idx}/>)
+        return (<MovieWidget key={movie.id} data={movie} idx={idx}/>)
       })
 
     if (movies.length > 0) {
