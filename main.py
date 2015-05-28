@@ -47,8 +47,9 @@ def add_movie():
     title = request.form.get('title')
     imdb_id = request.form.get('imdb_id')
     if title is not None and imdb_id is not None:
-        img_src = get_img_url(imdb_id)
-        movie = Movie(title=title, imdb_id=imdb_id, img_src=img_src, votes=0)
+        url = "http://www.imdb.com/title/" + imdb_id
+        img_src = get_img_url(url)
+        movie = Movie(title=title, imdb_id=imdb_id, url=url, img_src=img_src, votes=0)
         Session().add(movie)
         Session().commit()
 
@@ -87,12 +88,11 @@ def update_movie(movie_id):
 # ----------------------------------------------------
 # Helpers
 # ----------------------------------------------------
-def get_img_url(imdb_id):
-    url = "http://www.imdb.com/title/" + imdb_id
+def get_img_url(url):
     soup = Soup(urllib.urlopen(url))
     img = soup.find(id='img_primary').find('img')
     return img['src']
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)
