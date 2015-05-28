@@ -91,7 +91,7 @@ def update_movie(movie_id):
 def get_img_url(url):
     soup = Soup(urllib.urlopen(url))
     img = soup.find(id='img_primary').find('img')
-    return img['src']
+    if img: return img['src']
 
 
 if __name__ == '__main__':
