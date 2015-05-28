@@ -5,42 +5,6 @@ var app = app || {};
 
   var Dispatcher = new Flux.Dispatcher()
 
-  function Movie(api_data) {
-    return {
-      id: api_data.id,
-      title: api_data.title,
-      votes: api_data.votes,
-      url: api_data.url,
-      imdb_id: api_data.imdb_id
-    }
-  }
-
-  function ApiMovie(omdb_entry) {
-    var self = {
-      imdb_id: null,
-      title: null
-    }
-    self.toJQueryParams = toJQueryParams
-
-    Object.keys(omdb_entry).forEach(function(key) {
-      var lower = key.toLowerCase()
-      if (lower === "imdbid") {
-        self["imdb_id"] = omdb_entry[key]
-      }
-      else {
-        self[lower] = omdb_entry[key]
-      }
-    })
-
-    function toJQueryParams() {
-      return {
-        imdb_id: self.imdb_id,
-        title: self.title
-      }
-    }
-
-    return self
-  }
 
 
 
@@ -60,7 +24,7 @@ var app = app || {};
     movies: {},
 
     add_movie: function(data) {
-      MovieStore.movies[data.id] = Movie(data)
+      MovieStore.movies[data.id] = app.models.Movie(data)
     },
 
     get_all: function() {
@@ -120,7 +84,7 @@ var app = app || {};
           }
           else {
             omdb_movies.forEach(function(omdb_movie) {
-              var movie = ApiMovie(omdb_movie)
+              var movie = app.models.ApiMovie(omdb_movie)
               SearchStore.results[movie.imdb_id] = movie
             })
           }

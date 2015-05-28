@@ -60,6 +60,7 @@ var MovieWidget = React.createClass({
             <span className="glyphicon glyphicon-menu-down" onClick={this.handle_downvote} ></span>
           </div>
           <span className="index"> {this.props.idx + 1}</span>
+          <img className="movie-img" src={this.props.data.img_src}/>
           <span className="title"> {this.props.data.title}</span>
           <span className="votes"> {this.props.data.votes}</span>
           </li>

@@ -35,6 +35,11 @@ nav {
   color: gray;
 }
 
+.movie-img {
+  margin: 0 5px;
+  max-width: 64px;
+}
+
 .title {
   margin: 0 5px;
 }
@@ -42,6 +47,8 @@ nav {
 .votes {
   font-weight: bold;
   position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
   right: 5px;
 }
 
