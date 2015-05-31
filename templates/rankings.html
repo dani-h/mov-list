@@ -10,16 +10,24 @@
     <link rel="stylesheet" href="/lib/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="/css/rankings.css">
 
-    <script src="/lib/jquery/jquery-2.1.3.min.js"></script>
-    <script src="/lib/react/react.js"></script>
-    <script src="/lib/react/JSXTransformer.js"></script>
-    <script src="/lib/react/Flux.js"></script>
-    <script src="/lib/microevent/microevent.js"></script>
+    <script data-main="bin/main" src="lib/require/require.js"></script>
+    <script>
+        require.config({
+            shim: {
+                'wolfy87-eventemitter': {
+                    exports: 'EventEmitter'
+                }
+            },
+            paths: {
+                "jquery": "../lib/jquery/jquery-2.1.3.min",
+                "flux": "../lib/react/Flux",
+                "react": "../lib/react/react",
+                "eventemitter3": "../lib/eventemitter3/eventemitter3",
+                "wolfy87-eventemitter": "../lib/wolfy87-eventemitter/eventemitter",
+            },
+        });
+    </script>
 
-    <script src="/js/rankings.js"></script>
-    <script src="/js/models.js"></script>
-    <script src="/js/stores.js"></script>
-    <script type="text/jsx" src="/js/views.js"></script>
 
 </head>
 
