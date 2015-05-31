@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "outDir": "./static/bin/",
+        "module": "amd",
+        "noImplicitAny": false,
+        "removeComments": true,
+	"noEmitOnError": true,
+        "sourceMap": false,
+	"watch": true,
+	"target": "es5"
+    },
+    "files": [
+	"./static/ts/main.ts"
+    ]
+}
