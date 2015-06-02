@@ -10,6 +10,7 @@
 	"target": "es5"
     },
     "files": [
-	"./static/ts/main.ts"
+	"./static/ts/main.ts",
+	"./static/ts/requireconfig.ts"
     ]
 }
