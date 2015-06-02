@@ -56,7 +56,7 @@ module Views {
       let movies = Stores.movieStore.all()
         .sort((a, b) => a.votes < b.votes ? 1 : 0)
         .map((movie, idx) => {
-        return react.createElement(MovieWidget, { key: movie.id, data: movie, idx: idx })
+        return react.createElement(MovieWidget, { key: movie.id, data: movie, idx: idx + 1 })
       })
 
       return div(null, movies)

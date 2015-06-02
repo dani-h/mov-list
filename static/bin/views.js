@@ -43,7 +43,7 @@ define(["require", "exports", 'react', 'jquery', './stores', './actions'], funct
                 var movies = Stores.movieStore.all()
                     .sort(function (a, b) { return a.votes < b.votes ? 1 : 0; })
                     .map(function (movie, idx) {
-                    return react.createElement(MovieWidget, { key: movie.id, data: movie, idx: idx });
+                    return react.createElement(MovieWidget, { key: movie.id, data: movie, idx: idx + 1 });
                 });
                 return div(null, movies);
             };
