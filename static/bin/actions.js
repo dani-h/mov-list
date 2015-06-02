@@ -6,6 +6,9 @@ define(["require", "exports", 'flux'], function (require, exports, Flux) {
             function AddMovie(movie) {
                 this.movie = movie;
             }
+            AddMovie.dispatch = function (movie) {
+                Actions.Dispatcher.dispatch(new this(movie));
+            };
             return AddMovie;
         })();
         Actions.AddMovie = AddMovie;
@@ -13,6 +16,9 @@ define(["require", "exports", 'flux'], function (require, exports, Flux) {
             function UpvoteMovie(movie) {
                 this.movie = movie;
             }
+            UpvoteMovie.dispatch = function (movie) {
+                Actions.Dispatcher.dispatch(new this(movie));
+            };
             return UpvoteMovie;
         })();
         Actions.UpvoteMovie = UpvoteMovie;
@@ -20,6 +26,9 @@ define(["require", "exports", 'flux'], function (require, exports, Flux) {
             function DownvoteMovie(movie) {
                 this.movie = movie;
             }
+            DownvoteMovie.dispatch = function (movie) {
+                Actions.Dispatcher.dispatch(new this(movie));
+            };
             return DownvoteMovie;
         })();
         Actions.DownvoteMovie = DownvoteMovie;
@@ -27,6 +36,9 @@ define(["require", "exports", 'flux'], function (require, exports, Flux) {
             function UpdateSearch(api_data) {
                 this.api_data = api_data;
             }
+            UpdateSearch.dispatch = function (data) {
+                Actions.Dispatcher.dispatch(new this(data));
+            };
             return UpdateSearch;
         })();
         Actions.UpdateSearch = UpdateSearch;

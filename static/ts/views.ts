@@ -73,7 +73,7 @@ module Views {
       $.ajax('/movies/' + this.props.data.id, {
         method: 'PUT', data: { votes: this.props.data.votes + 1 }
       }).then(() => {
-        Actions.methods.upvote_movie(this.props.data)
+        Actions.UpvoteMovie.dispatch(this.props.data)
       })
     }
 
@@ -81,7 +81,7 @@ module Views {
       $.ajax('/movies/' + this.props.data.id, {
         method: 'PUT', data: { votes: this.props.data.votes - 1 }
       }).then(() => {
-        Actions.methods.downvote_movie(this.props.data)
+        Actions.DownvoteMovie.dispatch(this.props.data)
       })
     }
 
@@ -121,7 +121,7 @@ module Views {
         let url = 'http://www.omdbapi.com/'
         let search_string = event.target['value']
         $.ajax(url, { data: { type: 'movie', r: 'json', s: search_string }})
-        .then((data) => Actions.methods.update_search(data))
+        .then((data) => Actions.UpdateSearch.dispatch(data))
         .done(() => {
           console.log("Request done")
           this.setState({ disabled: false })
@@ -160,7 +160,7 @@ module Views {
   class SearchResultItem extends react.Component<{ data: Models.ApiMovie }, {}> {
     add_movie() {
       $.ajax('/movies/', { method: 'POST', data: this.props.data.toJSONParams() })
-        .then(new_movie => Actions.methods.add_movie(new_movie))
+        .then(new_movie => Actions.AddMovie.dispatch(new_movie))
     }
 
     render() {

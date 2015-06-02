@@ -6,10 +6,18 @@ module Actions {
   export type dispatcher_eventtype = AddMovie|UpvoteMovie|DownvoteMovie|UpdateSearch
   export let Dispatcher = new Flux.Dispatcher<dispatcher_eventtype>()
 
+
+  /**
+   * Note: Each class has a static method for ease of use when dispatching
+   * `this` in a static method refers to the class
+   */
   export class AddMovie {
     movie: Models.Movie
     constructor(movie: Models.Movie) {
       this.movie = movie
+    }
+    static dispatch(movie: Models.Movie) {
+      Dispatcher.dispatch(new this(movie))
     }
   }
 
@@ -18,12 +26,18 @@ module Actions {
     constructor(movie: Models.Movie) {
       this.movie = movie
     }
+    static dispatch(movie: Models.Movie) {
+      Dispatcher.dispatch(new this(movie))
+    }
   }
 
   export class DownvoteMovie {
     movie: Models.Movie
     constructor(movie: Models.Movie) {
       this.movie = movie
+    }
+    static dispatch(movie: Models.Movie) {
+      Dispatcher.dispatch(new this(movie))
     }
   }
   /**
@@ -35,9 +49,16 @@ module Actions {
     constructor(api_data) {
       this.api_data = api_data
     }
+    static dispatch(data) {
+      Dispatcher.dispatch(new this(data))
+    }
   }
 
 
+  /**
+   * @Deprecated
+   * Use static class methods instead
+   */
   export let methods = {
     add_movie: (movie: Models.Movie) => Dispatcher.dispatch(new AddMovie(movie)),
     upvote_movie: (movie: Models.Movie) => Dispatcher.dispatch(new UpvoteMovie(movie)),

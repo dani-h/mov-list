@@ -13,7 +13,6 @@ module Stores {
 
     constructor() {
       super()
-      console.log('zoom')
       this.dispatcher_id = Actions.Dispatcher.register(this.register_dispatcher.bind(this))
     }
 

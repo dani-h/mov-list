@@ -15,7 +15,6 @@ define(["require", "exports", './models', './SimpleEvent', './actions'], functio
                 this.EVENTS = {
                     CHANGE: 'moviestore-change'
                 };
-                console.log('zoom');
                 this.dispatcher_id = Actions.Dispatcher.register(this.register_dispatcher.bind(this));
             }
             MovieStore.prototype.all = function () {
