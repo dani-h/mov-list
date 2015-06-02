@@ -9,7 +9,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", 'react', 'jquery', './stores'], function (require, exports, react, $, Stores) {
+define(["require", "exports", 'react', 'jquery', './stores', './actions'], function (require, exports, react, $, Stores, Actions) {
     var Views;
     (function (Views) {
         var div = react.DOM.div;
@@ -59,7 +59,7 @@ define(["require", "exports", 'react', 'jquery', './stores'], function (require,
                 $.ajax('/movies/' + this.props.data.id, {
                     method: 'PUT', data: { votes: this.props.data.votes + 1 }
                 }).then(function () {
-                    Stores.Actions.upvote_movie(_this.props.data);
+                    Actions.methods.upvote_movie(_this.props.data);
                 });
             };
             MovieWidget.prototype.downvote = function () {
@@ -67,7 +67,7 @@ define(["require", "exports", 'react', 'jquery', './stores'], function (require,
                 $.ajax('/movies/' + this.props.data.id, {
                     method: 'PUT', data: { votes: this.props.data.votes - 1 }
                 }).then(function () {
-                    Stores.Actions.downvote_movie(_this.props.data);
+                    Actions.methods.downvote_movie(_this.props.data);
                 });
             };
             MovieWidget.prototype.render = function () {
@@ -89,9 +89,7 @@ define(["require", "exports", 'react', 'jquery', './stores'], function (require,
                     var url = 'http://www.omdbapi.com/';
                     var search_string = event.target['value'];
                     $.ajax(url, { data: { type: 'movie', r: 'json', s: search_string } })
-                        .then(function (data) {
-                        Stores.Actions.update_search(data);
-                    })
+                        .then(function (data) { return Actions.methods.update_search(data); })
                         .done(function () {
                         console.log("Request done");
                         _this.setState({ disabled: false });
@@ -129,7 +127,7 @@ define(["require", "exports", 'react', 'jquery', './stores'], function (require,
             }
             SearchResultItem.prototype.add_movie = function () {
                 $.ajax('/movies/', { method: 'POST', data: this.props.data.toJSONParams() })
-                    .then(function (new_movie) { return Stores.Actions.add_movie(new_movie); });
+                    .then(function (new_movie) { return Actions.methods.add_movie(new_movie); });
             };
             SearchResultItem.prototype.render = function () {
                 return (li({ className: 'list-group-item search-item' }, span({ className: 'search-item-title' }, this.props.data.title), button({ className: 'btn btn-primary btn-sm search-item-btn', onClick: this.add_movie.bind(this) }, 'Add movie')));

@@ -6,13 +6,12 @@
 
 ///<reference path="../lib/react/react.d.ts"/>
 ///<reference path="../lib/jquery/jquery.d.ts"/>
-///<reference path="./stores.ts"/>
-///<reference path="./models.ts"/>
 
 import react = require('react')
 import $ = require('jquery')
 import Stores = require('./stores')
 import Models = require('./models')
+import Actions = require('./actions')
 
 module Views {
   /**
@@ -74,7 +73,7 @@ module Views {
       $.ajax('/movies/' + this.props.data.id, {
         method: 'PUT', data: { votes: this.props.data.votes + 1 }
       }).then(() => {
-        Stores.Actions.upvote_movie(this.props.data)
+        Actions.methods.upvote_movie(this.props.data)
       })
     }
 
@@ -82,7 +81,7 @@ module Views {
       $.ajax('/movies/' + this.props.data.id, {
         method: 'PUT', data: { votes: this.props.data.votes - 1 }
       }).then(() => {
-        Stores.Actions.downvote_movie(this.props.data)
+        Actions.methods.downvote_movie(this.props.data)
       })
     }
 
@@ -113,7 +112,7 @@ module Views {
     }
 
     search(event: react.UIEvent) {
-      //Note, logging the event will result it being garbage collected by the time it's logged
+      //Note, logging the event will result it being garbage collected by the time it's `console.log`ed
       //so the props are null. Also, patch react.d.ts to include the `keyCode` props among others..
       let keyCode: number = event['keyCode']
       if (keyCode === 13) {
@@ -122,9 +121,7 @@ module Views {
         let url = 'http://www.omdbapi.com/'
         let search_string = event.target['value']
         $.ajax(url, { data: { type: 'movie', r: 'json', s: search_string }})
-        .then((data) => {
-          Stores.Actions.update_search(data)
-        })
+        .then((data) => Actions.methods.update_search(data))
         .done(() => {
           console.log("Request done")
           this.setState({ disabled: false })
@@ -163,7 +160,7 @@ module Views {
   class SearchResultItem extends react.Component<{ data: Models.ApiMovie }, {}> {
     add_movie() {
       $.ajax('/movies/', { method: 'POST', data: this.props.data.toJSONParams() })
-        .then(new_movie => Stores.Actions.add_movie(new_movie))
+        .then(new_movie => Actions.methods.add_movie(new_movie))
     }
 
     render() {
