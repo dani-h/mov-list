@@ -64,6 +64,7 @@ module Stores {
     register_dispatcher(payload: Actions.dispatcher_eventtype) {
 
       if (payload instanceof Actions.UpdateSearch) {
+        this.search_results = {}
         if (payload.api_data['Search']) {
           let list: any[] = payload.api_data['Search']
           for (let entry of list) {

@@ -59,6 +59,7 @@ define(["require", "exports", './models', './SimpleEvent', './actions'], functio
             };
             SearchStore.prototype.register_dispatcher = function (payload) {
                 if (payload instanceof Actions.UpdateSearch) {
+                    this.search_results = {};
                     if (payload.api_data['Search']) {
                         var list = payload.api_data['Search'];
                         for (var _i = 0; _i < list.length; _i++) {
